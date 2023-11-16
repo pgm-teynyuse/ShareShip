@@ -1,5 +1,4 @@
 "use client";
-// MaterialDetailPage.tsx
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,37 +14,42 @@ const MaterialDetailPage = ({ params }: { params: { id: number } }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [materialData, setMaterialData] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { data: session } = useSession();
 
   const fetchMaterialData = async () => {
-    const data = await fetchMaterial(params.id);
-    if (data) {
-      setMaterialData(data);
-      // Check if the current user is the owner
-      setIsOwner(session && session?.id === data.attributes.owner.data.id);
+    try {
+      const response = await fetchMaterial(params.id);
+
+      setMaterialData(response.data.data);
+      setIsOwner(response.data.data.attributes.owner.data.id === session?.id);
+    } catch (error) {
+      console.error('Material fetch failed', error);
     }
   };
+
+
 
   useEffect(() => {
-    fetchMaterialData();
-  }, [params.id, session]);
-
-  const requestMaterial = async (id: number) => {
-    if (session) {
+    const fetchData = async () => {
       try {
-        await CreateMaterialRequest(session.id, id);
-        
-        // Use router.push to navigate to the profile page
-        router.push('/profile/requested');
-
+        await fetchMaterialData();
       } catch (error) {
-        console.error('Material request failed', error);
+        console.error('Error fetching material data:', error);
+        // Handle error, e.g., redirect to an error page
+      } finally {
+        setIsLoading(false);
       }
-    } else {
-      console.error('User not authenticated');
-    }
-  };
+    };
+  
+    fetchData();
+  }, [params.id, session]);
+  
+  // Render loading state
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
 
   const handleUpdateSuccess = (updatedData) => {
