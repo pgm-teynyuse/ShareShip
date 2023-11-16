@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rent_requests",
+  "info": {
+    "singularName": "rent-request",
+    "pluralName": "rent-requests",
+    "displayName": "rentRequest",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "material": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::material.material"
+    },
+    "renter": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "fromDate": {
+      "type": "datetime"
+    },
+    "toDate": {
+      "type": "datetime"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "requested",
+        "accepted",
+        "declined"
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  font-family: 'Roboto';
+  font-weight: 400;
+  @apply bg-white text-black
+}
+
+.navBar{
+  @apply bg-white text-black
+}
+
+.logo {
+  font-weight: 500;
+  @apply bg-white text-black
+}
+
+a:hover {
+  @apply transition duration-200;
+  @apply text-cyan-800;
+}
